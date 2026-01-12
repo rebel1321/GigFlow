@@ -10,7 +10,7 @@ import gigRoutes from './routes/gigs.js';
 import bidRoutes from './routes/bids.js';
 import { errorHandler } from './middleware/error.js';
 
-// Load env vars
+
 dotenv.config();
 
 const app = express();
