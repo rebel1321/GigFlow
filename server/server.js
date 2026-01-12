@@ -5,6 +5,7 @@ import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
+import cron from 'node-cron';
 import authRoutes from './routes/auth.js';
 import gigRoutes from './routes/gigs.js';
 import bidRoutes from './routes/bids.js';
@@ -89,6 +90,18 @@ const PORT = process.env.PORT || 5000;
 
 httpServer.listen(PORT, () => {
   console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`);
+});
+
+// Cron job to ping server every 10 minutes (keeps Render from sleeping)
+cron.schedule('*/10 * * * *', async () => {
+  try {
+    const serverUrl = process.env.RENDER_URL || `http://localhost:${PORT}`;
+    const response = await fetch(`${serverUrl}/api/health`);
+    const data = await response.json();
+    console.log('Server pinged successfully:', data.timestamp);
+  } catch (error) {
+    console.error('Failed to ping server:', error.message);
+  }
 });
 
 // Handle unhandled promise rejections

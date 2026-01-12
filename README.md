@@ -18,7 +18,6 @@ A full-stack freelance marketplace platform where clients can post jobs (Gigs) a
 - **React.js** with Vite
 - **Tailwind CSS** for styling
 - **React Router** for navigation
-- **React Query** for server state management
 - **Axios** for API calls
 - **Socket.IO Client** for real-time features
 - **Shadcn UI** components
