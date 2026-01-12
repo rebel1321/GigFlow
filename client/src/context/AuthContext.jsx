@@ -38,6 +38,10 @@ export function AuthProvider({ children }) {
     try {
       const response = await api.post('/auth/login', { email, password });
       if (response.data.success) {
+        // Store token in localStorage
+        if (response.data.token) {
+          localStorage.setItem('token', response.data.token);
+        }
         setState({
           user: response.data.user,
           isAuthenticated: true,
@@ -56,6 +60,10 @@ export function AuthProvider({ children }) {
     try {
       const response = await api.post('/auth/register', { name, email, password });
       if (response.data.success) {
+        // Store token in localStorage
+        if (response.data.token) {
+          localStorage.setItem('token', response.data.token);
+        }
         setState({
           user: response.data.user,
           isAuthenticated: true,
@@ -73,6 +81,8 @@ export function AuthProvider({ children }) {
   const logout = async () => {
     try {
       await api.post('/auth/logout');
+      // Remove token from localStorage
+      localStorage.removeItem('token');
       setState({
         user: null,
         isAuthenticated: false,
@@ -80,6 +90,8 @@ export function AuthProvider({ children }) {
       });
       toast.success('Logged out successfully');
     } catch (error) {
+      // Remove token even if API call fails
+      localStorage.removeItem('token');
       setState({
         user: null,
         isAuthenticated: false,
